@@ -1,20 +1,31 @@
-import { Image, StyleSheet, View } from "react-native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Title from "../common/Title";
+import { useContext } from "react";
+import { AuthContext } from "../../store/AuthContext";
+import { useNavigation } from "@react-navigation/native";
 
 const HeaderProfile = () => {
+  const { userData } = useContext(AuthContext);
+  const navigation = useNavigation();
+  const profilePicClickHandler = () => {
+    navigation.navigate("Profile");
+  };
+  if (!userData) return null;
   return (
     <View style={styles.headerContainer}>
       <Title />
       <View style={styles.optionsContainer}>
         <Ionicons name="notifications-circle-outline" size={50} />
         <Ionicons name="search-circle-outline" size={50} />
-        <Image
-          style={styles.profilePic}
-          source={{
-            uri: "https://th.bing.com/th/id/OIP.Fhxe1ojPRPz36muHp8UVMAHaHa?w=500&h=500&rs=1&pid=ImgDetMain",
-          }}
-        />
+        <Pressable onPress={profilePicClickHandler}>
+          <Image
+            style={styles.profilePic}
+            source={{
+              uri: userData.avatar,
+            }}
+          />
+        </Pressable>
       </View>
     </View>
   );
