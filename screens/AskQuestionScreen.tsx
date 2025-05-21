@@ -5,8 +5,18 @@ import Title from "../components/common/Title";
 import QuestionOptions from "../components/QuestionComponents/AskQuestion/QuestionOptions";
 import Button from "../components/UI/Button";
 import { colors } from "../constants/colors";
+import { useContext } from "react";
+import { QuestionOptionsContext } from "../store/questionOptionsContext";
 
 const AskQuestionScreen = () => {
+  console.log(
+    useContext(QuestionOptionsContext).userQuestion,
+    "---user question"
+  );
+  console.log(
+    useContext(QuestionOptionsContext).selectedOptions,
+    "--- options selected"
+  );
   return (
     <ScreenBaseContainer>
       <View style={styles.container}>
