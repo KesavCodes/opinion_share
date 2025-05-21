@@ -1,4 +1,4 @@
-import { ScrollView, StyleProp, StyleSheet, ViewStyle } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 
 type IProps = {
   children: React.ReactNode;
