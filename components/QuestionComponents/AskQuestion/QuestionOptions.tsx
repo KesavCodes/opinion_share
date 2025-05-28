@@ -12,19 +12,21 @@ const QuestionOptions = () => {
     <View style={styles.rootOptionContainer}>
       <Text style={styles.titleTxt}>Opinion Options</Text>
       <View style={styles.optionsContainer}>
-        {optionsArr.map((item) => {
-          return (
-            <OptionsCard
-              key={item.id}
-              id={item.id}
-              label={item.label}
-              options={item.options}
-              info={item.info}
-              currentlySelected={selectedOptions[item.id]}
-              changeSelected={optionChangeHandler}
-            />
-          );
-        })}
+        {optionsArr
+          .filter((item) => item.pageType === "input")
+          .map((item) => {
+            return (
+              <OptionsCard
+                key={item.id}
+                id={item.id}
+                label={item.label}
+                options={item.options}
+                info={item.info}
+                currentlySelected={selectedOptions[item.id]}
+                changeSelected={optionChangeHandler}
+              />
+            );
+          })}
       </View>
     </View>
   );

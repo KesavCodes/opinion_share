@@ -6,10 +6,12 @@ import { useContext } from "react";
 import { AuthContext } from "../store/AuthContext";
 import AuthScreen from "../screens/AuthScreen";
 import ProfilePageScreen from "../screens/ProfilePageScreen";
+import PreviewAndConfirmScreen from "../screens/PreviewAndConfirmScreen";
 
 type RootStackParamList = {
-  Home: undefined; // No params for this route
-  AskQuestion: undefined; // No params for this route
+  Home: undefined;
+  AskQuestion: undefined; 
+  PreviewAndConfirm: undefined; 
   Auth: undefined;
   Profile: undefined;
 };
@@ -42,6 +44,13 @@ const StackNavigation = () => {
           <Stack.Screen
             name="AskQuestion"
             component={AskQuestionScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="PreviewAndConfirm"
+            component={PreviewAndConfirmScreen}
             options={{
               headerShown: false,
             }}

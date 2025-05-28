@@ -1,8 +1,9 @@
 import { Alert, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import Button from "./Button";
 import { colors } from "../../constants/colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { QuestionOptionsContext } from "../../store/questionOptionsContext";
 
 type OptionCardProps = {
   label: string;
@@ -13,18 +14,19 @@ type OptionCardProps = {
   changeSelected: (id: string, value: string) => void;
 };
 
-const showAlert = (title: string, desc: string) => Alert.alert(
-  title,
-  desc,
-  [
+const showAlert = (title: string, desc: string) =>
+  Alert.alert(
+    title,
+    desc,
+    [
+      {
+        text: "Got it!",
+      },
+    ],
     {
-      text: "Got it!",
-    },
-  ],
-  {
-    cancelable: true,
-  }
-)
+      cancelable: true,
+    }
+  );
 
 const OptionsCard: React.FC<OptionCardProps> = ({
   label,
@@ -34,11 +36,16 @@ const OptionsCard: React.FC<OptionCardProps> = ({
   currentlySelected,
   changeSelected,
 }) => {
+  const { selectedOptions } = useContext(QuestionOptionsContext);
   return (
     <View style={styles.cardContainer}>
       <View style={styles.titleContainer}>
         <Text style={styles.labelTxt}>{label}</Text>
-        <Ionicons name="information-circle" size={24} onPress={()=>showAlert(label, info)} />
+        <Ionicons
+          name="information-circle"
+          size={24}
+          onPress={() => showAlert(label, info)}
+        />
       </View>
       <View style={styles.optionsContainer}>
         {options.map(({ key, value }) => (
@@ -49,6 +56,9 @@ const OptionsCard: React.FC<OptionCardProps> = ({
                 styles.ctaBtn,
                 value === currentlySelected && { backgroundColor: "#ff5d5d" },
               ]}
+              disable={
+                selectedOptions.visibility === "allHands" && value === "public"
+              }
             >
               <Text style={styles.optionsTxt}>{key}</Text>
             </Button>

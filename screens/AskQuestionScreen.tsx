@@ -8,15 +8,21 @@ import { colors } from "../constants/colors";
 import { useContext } from "react";
 import { QuestionOptionsContext } from "../store/questionOptionsContext";
 
-const AskQuestionScreen = () => {
-  console.log(
-    useContext(QuestionOptionsContext).userQuestion,
-    "---user question"
-  );
-  console.log(
-    useContext(QuestionOptionsContext).selectedOptions,
-    "--- options selected"
-  );
+interface NavigationProps {
+  navigation: {
+    navigate: (screen: string) => void;
+  };
+}
+
+const AskQuestionScreen: React.FC<NavigationProps> = ({ navigation }) => {
+  const { userQuestion } = useContext(QuestionOptionsContext);
+  const onButtonClick = (): void => {
+    if (userQuestion.trim() === "") {
+      alert("Please enter a question before posting.");
+      return;
+    }
+    navigation.navigate("PreviewAndConfirm");
+  };
   return (
     <ScreenBaseContainer>
       <View style={styles.container}>
@@ -26,7 +32,7 @@ const AskQuestionScreen = () => {
         <QuestionInput />
         <QuestionOptions />
         <View>
-          <Button onPressHandler={() => {}} style={styles.ctaBtn}>
+          <Button onPressHandler={onButtonClick} style={styles.ctaBtn}>
             <Text style={styles.labelText}>Preview and Confirm</Text>
           </Button>
         </View>
