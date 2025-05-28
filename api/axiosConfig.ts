@@ -18,4 +18,16 @@ api.interceptors.request.use(
   (err) => Promise.reject(err)
 );
 
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    console.log(error);
+    const errorMessage = error?.response?.data?.message || error.message || "";
+    if (errorMessage.toLowerCase().includes("token")) {
+      await AsyncStorage.removeItem("osUser");
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default api;
