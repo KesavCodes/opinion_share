@@ -1,4 +1,4 @@
-import { Alert, Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import Button from "../../UI/Button";
 import { colors } from "../../../constants/colors";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -6,27 +6,13 @@ import { useContext, useEffect, useState } from "react";
 import { QuestionOptionsContext } from "../../../store/questionOptionsContext";
 import { getFriends } from "../../../api/friends";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Shimmer from "../../UI/Shimmer";
 
 type FriendsResponse = {
   id: string;
   name: string;
   username: string;
   avatar: string;
-};
-
-const LoadingShimmer = () => {
-  return new Array(3)
-    .fill(0)
-    .map((_, index) => (
-      <View
-        key={index}
-        style={[
-          styles.shimmer,
-          index === 0 && styles.firstCard,
-          index === 2 && styles.lastCard,
-        ]}
-      />
-    ));
 };
 
 const FriendDrawer = () => {
@@ -56,7 +42,7 @@ const FriendDrawer = () => {
     <View style={styles.container}>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {isLoading ? (
-          <LoadingShimmer />
+          <Shimmer width={220} height={110} />
         ) : (
           availableFriends.map((item, index) => {
             const isSelected = friendsList.includes(item.id);
@@ -126,13 +112,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 12,
   },
-  shimmer: {
-    width: 220,
-    height: 110,
-    borderRadius: 8,
-    backgroundColor: colors.bgSecondary,
-    marginHorizontal: 6,
-  },
+
   card: {
     flexDirection: "row",
     alignItems: "center",

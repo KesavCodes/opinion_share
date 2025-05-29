@@ -1,60 +1,108 @@
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import { dummyQuestions } from "../../dummy_data/ask";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Button from "../UI/Button";
 import { colors } from "../../constants/colors";
+import { useEffect, useState } from "react";
+import { getQuestions } from "../../api/question";
+import Shimmer from "../UI/Shimmer";
+
+type QuestionResponseType = {
+  id: string;
+  createdById: string;
+  questionText: string;
+  visibility: string;
+  identity: string;
+  isTimed: boolean;
+  endTimeStamp: string | null;
+  isPublic: boolean;
+  publicLink: string | null;
+  createdAt: string;
+  createdBy: {
+    name: string | null;
+    username: string;
+    avatar: string;
+  };
+};
 
 const QuestionDrawer = () => {
+  const [availableQuestions, setAvailableQuestions] = useState<QuestionResponseType[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    const setQuestionData = async () => {
+      setIsLoading(true);
+      const questions = await getQuestions();
+      setAvailableQuestions(questions);
+      setIsLoading(false);
+    };
+    setQuestionData();
+  }, []);
+  if (!isLoading && (!availableQuestions || availableQuestions.length === 0)) {
+    return <Text>No Question Available</Text>;
+  }
+  console.log("Available Questions: ", availableQuestions);
   return (
     <View>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        {dummyQuestions.map((item, index) => {
-          return (
-            <View
-              key={item.id}
-              style={[styles.card, index === 0 && styles.firstCard]}
-            >
-              <View style={styles.titleHolder}>
-                <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
-                  {item.title}
-                </Text>
-              </View>
-              <View style={styles.infoContainer}>
-                <View style={styles.infoTxtHolder}>
-                  <View style={styles.createdByHolder}>
-                    <Text style={styles.infoTxt}>Created By</Text>
-                    <Image
-                      style={styles.profilePic}
-                      source={{
-                        uri: "https://th.bing.com/th/id/OIP.Fhxe1ojPRPz36muHp8UVMAHaHa?w=500&h=500&rs=1&pid=ImgDetMain",
-                      }}
-                    />
+        {isLoading ? (
+          <Shimmer width={310} height={210} />
+        ) : (
+          availableQuestions.map((item, index) => {
+              const displayName = item.createdBy.name || item.createdBy.username;
+            return (
+              <View
+                key={item.id}
+                style={[styles.card, index === 0 && styles.firstCard]}
+              >
+                <View style={styles.titleHolder}>
+                  <Text
+                    style={styles.title}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {item.questionText}
+                  </Text>
+                </View>
+                <View style={styles.infoContainer}>
+                  <View style={styles.infoTxtHolder}>
+                    <View style={styles.createdByHolder}>
+                      <Image
+                        style={styles.profilePic}
+                        source={{
+                          uri: item.createdBy.avatar,
+                        }}
+                      />
+                      <View>
+                        <Text style={styles.infoTxt}>Created By</Text>
+                        <Text>{displayName}</Text>
+                      </View>
+                    </View>
+                    <View>
+                      <Text style={styles.infoTxt}>
+                        Closes in <Text style={styles.time}>8h 32m 64s</Text>
+                      </Text>
+                    </View>
                   </View>
-                  <View>
-                    <Text style={styles.infoTxt}>
-                      Closes in <Text style={styles.time}>8h 32m 64s</Text>
-                    </Text>
+                  {/* Have to have proper icons for both visibility and identity */}
+                  <View style={styles.tagHolder}>
+                    {item.visibility === "instantReveal" && (
+                      <Ionicons name="hand-right-outline" size={24} />
+                    )}
+                    {item.identity === "showName" && (
+                      <Ionicons name="business-outline" size={24} />
+                    )}
                   </View>
                 </View>
-                <View style={styles.tagHolder}>
-                  {item.allHands && (
-                    <Ionicons name="hand-right-outline" size={24} />
-                  )}
-                  {item.anonymous && (
-                    <Ionicons name="business-outline" size={24} />
-                  )}
+                <View>
+                  <Button onPressHandler={() => {}}>
+                    <View style={styles.ctaBtn}>
+                      <Text style={styles.labelText}>Submit</Text>
+                    </View>
+                  </Button>
                 </View>
               </View>
-              <View>
-                <Button onPressHandler={() => {}}>
-                  <View style={styles.ctaBtn}>
-                    <Text style={styles.labelText}>Submit</Text>
-                  </View>
-                </Button>
-              </View>
-            </View>
-          );
-        })}
+            );
+          })
+        )}
       </ScrollView>
     </View>
   );

@@ -12,7 +12,7 @@ type AddQuestionParams = {
 export const getQuestions = async () => {
   try {
     const res = await api.get("/question/");
-    return res.data;
+    return res.data.data;
   } catch (error: any) {
     console.log(error);
     Alert.alert(
