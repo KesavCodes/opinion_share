@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import { getQuestions } from "../../api/question";
 import Shimmer from "../UI/Shimmer";
 
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+
 type QuestionResponseType = {
   id: string;
   createdById: string;
@@ -25,7 +28,9 @@ type QuestionResponseType = {
 };
 
 const QuestionDrawer = () => {
-  const [availableQuestions, setAvailableQuestions] = useState<QuestionResponseType[]>([]);
+  const [availableQuestions, setAvailableQuestions] = useState<
+    QuestionResponseType[]
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const setQuestionData = async () => {
@@ -39,7 +44,15 @@ const QuestionDrawer = () => {
   if (!isLoading && (!availableQuestions || availableQuestions.length === 0)) {
     return <Text>No Question Available</Text>;
   }
-  console.log("Available Questions: ", availableQuestions);
+  const iconMapping = {
+    instantReveal: (
+      <MaterialCommunityIcons name="lightning-bolt" size={22} color="black" />
+    ),
+    allHands: <FontAwesome name="handshake-o" size={22} color="black" />,
+    showName: <FontAwesome name="user" size={22} color="black" />,
+    anonymous: <FontAwesome name="user-secret" size={22} color="black" />,
+  };
+
   return (
     <View>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -47,7 +60,7 @@ const QuestionDrawer = () => {
           <Shimmer width={310} height={210} />
         ) : (
           availableQuestions.map((item, index) => {
-              const displayName = item.createdBy.name || item.createdBy.username;
+            const displayName = item.createdBy.name || item.createdBy.username;
             return (
               <View
                 key={item.id}
@@ -72,30 +85,48 @@ const QuestionDrawer = () => {
                         }}
                       />
                       <View>
-                        <Text style={styles.infoTxt}>Created By</Text>
-                        <Text>{displayName}</Text>
+                        <Text>Created By</Text>
+                        <Text style={styles.creatorName}>{displayName}</Text>
                       </View>
                     </View>
                     <View>
-                      <Text style={styles.infoTxt}>
-                        Closes in <Text style={styles.time}>8h 32m 64s</Text>
-                      </Text>
+                      {item.endTimeStamp ? (
+                        <Text>
+                          <MaterialCommunityIcons
+                            name="timer-outline"
+                            size={18}
+                            color="black"
+                          />
+                          {" "}
+                          Closes in <Text style={styles.time}>8h 32m 64s</Text>
+                        </Text>
+                      ) : (
+                        <Text style={styles.time}>
+                          <MaterialCommunityIcons
+                            name="timer-off-outline"
+                            size={18}
+                            color="black"
+                          />
+                          {" "}
+                          No Time Limit
+                        </Text>
+                      )}
                     </View>
                   </View>
                   {/* Have to have proper icons for both visibility and identity */}
                   <View style={styles.tagHolder}>
-                    {item.visibility === "instantReveal" && (
-                      <Ionicons name="hand-right-outline" size={24} />
-                    )}
-                    {item.identity === "showName" && (
-                      <Ionicons name="business-outline" size={24} />
-                    )}
+                    {item.visibility === "instantReveal"
+                      ? iconMapping.instantReveal
+                      : iconMapping.allHands}
+                    {item.identity === "showName"
+                      ? iconMapping.showName
+                      : iconMapping.anonymous}
                   </View>
                 </View>
                 <View>
                   <Button onPressHandler={() => {}}>
                     <View style={styles.ctaBtn}>
-                      <Text style={styles.labelText}>Submit</Text>
+                      <Text style={styles.labelText}>Answer</Text>
                     </View>
                   </Button>
                 </View>
@@ -116,7 +147,6 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: 8,
     width: 320,
-    height: 210,
     padding: 12,
     marginHorizontal: 4,
     backgroundColor: "#fff1ef",
@@ -148,8 +178,9 @@ const styles = StyleSheet.create({
     gap: 10,
     width: "80%",
   },
-  infoTxt: {
-    fontSize: 16,
+  creatorName: {
+    fontSize: 15,
+    fontWeight: 500,
   },
   time: {
     fontWeight: "bold",
@@ -164,7 +195,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "flex-end",
-    gap: 8,
+    gap: 10,
     flex: 1,
     paddingTop: 10,
   },
