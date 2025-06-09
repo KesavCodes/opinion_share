@@ -4,6 +4,7 @@ import { AuthContext } from "../store/AuthContext";
 import Button from "../components/UI/Button";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { updateUser } from "../api/user";
+import Title from "../components/common/Title";
 
 let initialRender = true;
 
@@ -46,6 +47,7 @@ const ProfilePageScreen = () => {
   }, [profileData.email, profileData.name]);
   return (
     <View style={styles.container}>
+      <Title />
       <Image source={{ uri: profileData.avatar }} style={styles.avatar} />
       <View>
         <Text>Member since {formatterFromDate}</Text>

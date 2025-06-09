@@ -10,7 +10,7 @@ const QuestionInput = () => {
   return (
     <View style={styles.container}>
       <View style={styles.labelHolder}>
-        <Text style={styles.label}>What's on your mind?</Text>
+        <Text style={styles.label}>What's on your mind? 🤔</Text>
         <Text style={styles.count}>{userQuestion.length}/500</Text>
       </View>
       <View style={styles.inputHolder}>
