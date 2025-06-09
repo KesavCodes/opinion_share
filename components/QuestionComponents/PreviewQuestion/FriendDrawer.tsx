@@ -8,7 +8,7 @@ import { getFriends } from "../../../api/friends";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Shimmer from "../../UI/Shimmer";
 
-type FriendsResponse = {
+export type FriendsResponse = {
   id: string;
   name: string;
   username: string;

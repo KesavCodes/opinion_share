@@ -7,13 +7,15 @@ import { AuthContext } from "../store/AuthContext";
 import AuthScreen from "../screens/AuthScreen";
 import ProfilePageScreen from "../screens/ProfilePageScreen";
 import PreviewAndConfirmScreen from "../screens/PreviewAndConfirmScreen";
+import FriendsTabs from "./FriendsTabNavigation";
 
 type RootStackParamList = {
   Home: undefined;
-  AskQuestion: undefined; 
-  PreviewAndConfirm: undefined; 
+  AskQuestion: undefined;
+  PreviewAndConfirm: undefined;
   Auth: undefined;
   Profile: undefined;
+  Friends: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -32,7 +34,7 @@ const StackNavigation = () => {
         },
       }}
     >
-      {(userData && userData.userToken) ? (
+      {userData && userData.userToken ? (
         <>
           <Stack.Screen
             name="Home"
@@ -58,6 +60,16 @@ const StackNavigation = () => {
           <Stack.Screen
             name="Profile"
             component={ProfilePageScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Friends"
+            component={FriendsTabs}
+            options={{
+              headerShown: false,
+            }}
           />
         </>
       ) : (
