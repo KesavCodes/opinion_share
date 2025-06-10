@@ -5,7 +5,29 @@ import { FriendsResponse } from "../../components/QuestionComponents/PreviewQues
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FriendListItem from "../../components/friendsComponents/FriendListItem";
 import RemoveFriendOption from "../../components/friendsComponents/RemoveFriendOption";
+import LoadingState from "../../assets/images/ui/Loading";
+import { colors } from "../../constants/colors";
+import EmptyState from "../../assets/images/ui/Empty";
 
+const LoadingFriends = () => (
+  <View>
+    <View style={styles.imgHolder}>
+      <LoadingState />
+    </View>
+    <Text style={styles.feedbackText}>
+      Sit tight, We are loading your Friends
+    </Text>
+  </View>
+);
+
+const EmptyFriends = () => (
+  <View>
+    <View style={styles.imgHolder}>
+      <EmptyState />
+    </View>
+    <Text style={styles.feedbackText}>No friends found</Text>
+  </View>
+);
 const AllFriendsScreen = () => {
   const [availableFriends, setAvailableFriends] = useState<FriendsResponse[]>(
     []
@@ -66,9 +88,7 @@ const AllFriendsScreen = () => {
           />
         )}
         contentContainerStyle={styles.contentContainer}
-        ListEmptyComponent={
-          isLoading ? <Text>Loading...</Text> : <Text>No friends found</Text>
-        }
+        ListEmptyComponent={isLoading ? <LoadingFriends /> : <EmptyFriends />}
       />
     </View>
   );
@@ -79,5 +99,14 @@ export default AllFriendsScreen;
 const styles = StyleSheet.create({
   contentContainer: {
     paddingVertical: 8,
+  },
+  imgHolder: {
+    maxHeight: 450,
+  },
+  feedbackText: {
+    textAlign: "center",
+    color: colors.textPrimary,
+    fontSize: 18,
+    fontWeight: "500",
   },
 });
