@@ -86,3 +86,20 @@ export const updateUser = async ({
     );
   }
 };
+
+export const searchUser = async (key: string, signal: AbortSignal) => {
+  if (!key) {
+    Alert.alert("Search Failed", "Search should at least have one character");
+    return [];
+  }
+  try {
+    const res = await api.get(`/user/search?key=${key}`, { signal });
+    return res.data.data;
+  } catch (error: any) {
+    Alert.alert(
+      "Search Failed",
+      error.response?.data?.message || error.message
+    );
+    return [];
+  }
+};
