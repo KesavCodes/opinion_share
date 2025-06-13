@@ -8,14 +8,16 @@ import AuthScreen from "../screens/AuthScreen";
 import ProfilePageScreen from "../screens/ProfilePageScreen";
 import PreviewAndConfirmScreen from "../screens/PreviewAndConfirmScreen";
 import FriendsTabs from "./FriendsTabNavigation";
+import QuestionDetailScreen from "../screens/QuestionDetailScreen";
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Home: undefined;
   AskQuestion: undefined;
   PreviewAndConfirm: undefined;
   Auth: undefined;
   Profile: undefined;
   Friends: undefined;
+  QuestionDetail: {questionId: string};
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -67,6 +69,13 @@ const StackNavigation = () => {
           <Stack.Screen
             name="Friends"
             component={FriendsTabs}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="QuestionDetail"
+            component={QuestionDetailScreen}
             options={{
               headerShown: false,
             }}

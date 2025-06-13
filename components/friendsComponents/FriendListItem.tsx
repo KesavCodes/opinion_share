@@ -4,7 +4,7 @@ import { FriendsResponse } from "../QuestionComponents/PreviewQuestion/FriendDra
 import { colors } from "../../constants/colors";
 import LoadingState from "../../assets/images/ui/Loading";
 import EmptyState from "../../assets/images/ui/Empty";
-import RemoveFriendOption from "./RemoveFriendOption";
+import RemoveFriendOption from "./FriendOption";
 
 interface FriendsListProps {
   friendsData: FriendsResponse[];

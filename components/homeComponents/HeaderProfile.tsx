@@ -5,15 +5,19 @@ import Title from "../common/Title";
 import { useContext } from "react";
 import { AuthContext } from "../../store/AuthContext";
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../navigation/StackNavigation";
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const HeaderProfile = () => {
   const { userData } = useContext(AuthContext);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const profilePicClickHandler = () => {
-    navigation.navigate("Profile" as unknown as never);
+    navigation.navigate("Profile");
   };
   const friendsListClickHandler = () => {
-    navigation.navigate("Friends" as unknown as never);
+    navigation.navigate("Friends");
   };
   if (!userData) return null;
   return (

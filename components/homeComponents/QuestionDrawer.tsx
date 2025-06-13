@@ -1,6 +1,11 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import Button from "../UI/Button";
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { colors } from "../../constants/colors";
 import { useEffect, useState } from "react";
 import { getQuestions } from "../../api/question";
@@ -8,6 +13,9 @@ import Shimmer from "../UI/Shimmer";
 
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../navigation/StackNavigation";
 
 type QuestionResponseType = {
   id: string;
@@ -27,11 +35,15 @@ type QuestionResponseType = {
   };
 };
 
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
 const QuestionDrawer = () => {
   const [availableQuestions, setAvailableQuestions] = useState<
     QuestionResponseType[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
+  const navigation = useNavigation<NavigationProp>();
+
   useEffect(() => {
     const setQuestionData = async () => {
       setIsLoading(true);
@@ -53,6 +65,9 @@ const QuestionDrawer = () => {
     anonymous: <FontAwesome name="user-secret" size={22} color="black" />,
   };
 
+  const onQuestionCardPressHandler = (questionId: string) =>
+    navigation.navigate("QuestionDetail", { questionId }) ;
+
   return (
     <View>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -62,75 +77,74 @@ const QuestionDrawer = () => {
           availableQuestions.map((item, index) => {
             const displayName = item.createdBy.name || item.createdBy.username;
             return (
-              <View
-                key={item.id}
-                style={[styles.card, index === 0 && styles.firstCard]}
-              >
-                <View style={styles.titleHolder}>
-                  <Text
-                    style={styles.title}
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                  >
-                    {item.questionText}
-                  </Text>
-                </View>
-                <View style={styles.infoContainer}>
-                  <View style={styles.infoTxtHolder}>
-                    <View style={styles.createdByHolder}>
-                      <Image
-                        style={styles.profilePic}
-                        source={{
-                          uri: item.createdBy.avatar,
-                        }}
-                      />
+              <Pressable onPress={() => onQuestionCardPressHandler(item.id)}>
+                <View
+                  key={item.id}
+                  style={[styles.card, index === 0 && styles.firstCard]}
+                >
+                  <View style={styles.titleHolder}>
+                    <Text
+                      style={styles.title}
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {item.questionText}
+                    </Text>
+                  </View>
+                  <View style={styles.infoContainer}>
+                    <View style={styles.infoTxtHolder}>
+                      <View style={styles.createdByHolder}>
+                        <Image
+                          style={styles.profilePic}
+                          source={{
+                            uri: item.createdBy.avatar,
+                          }}
+                        />
+                        <View>
+                          <Text>Created By</Text>
+                          <Text style={styles.creatorName}>{displayName}</Text>
+                        </View>
+                      </View>
                       <View>
-                        <Text>Created By</Text>
-                        <Text style={styles.creatorName}>{displayName}</Text>
+                        {item.endTimeStamp ? (
+                          <Text>
+                            <MaterialCommunityIcons
+                              name="timer-outline"
+                              size={18}
+                              color="black"
+                            />{" "}
+                            Closes in{" "}
+                            <Text style={styles.time}>8h 32m 64s</Text>
+                          </Text>
+                        ) : (
+                          <Text style={styles.time}>
+                            <MaterialCommunityIcons
+                              name="timer-off-outline"
+                              size={18}
+                              color="black"
+                            />{" "}
+                            No Time Limit
+                          </Text>
+                        )}
                       </View>
                     </View>
-                    <View>
-                      {item.endTimeStamp ? (
-                        <Text>
-                          <MaterialCommunityIcons
-                            name="timer-outline"
-                            size={18}
-                            color="black"
-                          />
-                          {" "}
-                          Closes in <Text style={styles.time}>8h 32m 64s</Text>
-                        </Text>
-                      ) : (
-                        <Text style={styles.time}>
-                          <MaterialCommunityIcons
-                            name="timer-off-outline"
-                            size={18}
-                            color="black"
-                          />
-                          {" "}
-                          No Time Limit
-                        </Text>
-                      )}
+                    {/* Have to have proper icons for both visibility and identity */}
+                    <View style={styles.tagHolder}>
+                      {item.visibility === "instantReveal"
+                        ? iconMapping.instantReveal
+                        : iconMapping.allHands}
+                      {item.identity === "showName"
+                        ? iconMapping.showName
+                        : iconMapping.anonymous}
                     </View>
                   </View>
-                  {/* Have to have proper icons for both visibility and identity */}
-                  <View style={styles.tagHolder}>
-                    {item.visibility === "instantReveal"
-                      ? iconMapping.instantReveal
-                      : iconMapping.allHands}
-                    {item.identity === "showName"
-                      ? iconMapping.showName
-                      : iconMapping.anonymous}
-                  </View>
-                </View>
-                <View>
-                  <Button onPressHandler={() => {}}>
+                  <View>
                     <View style={styles.ctaBtn}>
                       <Text style={styles.labelText}>Answer</Text>
                     </View>
-                  </Button>
+                  </View>
                 </View>
-              </View>
+              </Pressable>
             );
           })
         )}
