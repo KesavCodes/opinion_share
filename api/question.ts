@@ -20,7 +20,14 @@ export const getQuestions = async () => {
       error.response?.data?.message || error.message
     );
   }
-}
+};
+
+export const getQuestionById = async (questionId: string) => {
+  try {
+    const res = await api.get(`/question/${questionId}`);
+    return res.data.data;
+  } catch (error: any) {}
+};
 
 export const addQuestion = async ({
   userId,

@@ -17,10 +17,9 @@ interface NavigationProps {
   };
 }
 
-const PreviewAndConfirmScreen: React.FC<NavigationProps> = ({navigation}) => {
-  const { selectedOptions, userQuestion, friendsList, resetAllOption } = useContext(
-    QuestionOptionsContext
-  );
+const PreviewAndConfirmScreen: React.FC<NavigationProps> = ({ navigation }) => {
+  const { selectedOptions, userQuestion, friendsList, resetAllOption } =
+    useContext(QuestionOptionsContext);
   const { userData } = useContext(AuthContext);
   const onPostQuestion = async () => {
     if (selectedOptions.shareBy === "friends" && friendsList.length === 0) {
@@ -45,7 +44,7 @@ const PreviewAndConfirmScreen: React.FC<NavigationProps> = ({navigation}) => {
         <View style={styles.titleContainer}>
           <Title holderStyle={styles.center} />
         </View>
-        <PreviewUserQuestion />
+        <PreviewUserQuestion type="preview" question={userQuestion} />
         <ShareBy />
         {selectedOptions.shareBy === "friends" && <FriendDrawer />}
         <View>

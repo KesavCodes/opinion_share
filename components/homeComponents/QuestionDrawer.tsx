@@ -37,6 +37,15 @@ type QuestionResponseType = {
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
+export const iconMapping = {
+  instantReveal: (
+    <MaterialCommunityIcons name="lightning-bolt" size={22} color="black" />
+  ),
+  allHands: <FontAwesome name="handshake-o" size={22} color="black" />,
+  showName: <FontAwesome name="user" size={22} color="black" />,
+  anonymous: <FontAwesome name="user-secret" size={22} color="black" />,
+};
+
 const QuestionDrawer = () => {
   const [availableQuestions, setAvailableQuestions] = useState<
     QuestionResponseType[]
@@ -56,17 +65,9 @@ const QuestionDrawer = () => {
   if (!isLoading && (!availableQuestions || availableQuestions.length === 0)) {
     return <Text>No Question Available</Text>;
   }
-  const iconMapping = {
-    instantReveal: (
-      <MaterialCommunityIcons name="lightning-bolt" size={22} color="black" />
-    ),
-    allHands: <FontAwesome name="handshake-o" size={22} color="black" />,
-    showName: <FontAwesome name="user" size={22} color="black" />,
-    anonymous: <FontAwesome name="user-secret" size={22} color="black" />,
-  };
 
   const onQuestionCardPressHandler = (questionId: string) =>
-    navigation.navigate("QuestionDetail", { questionId }) ;
+    navigation.navigate("QuestionDetail", { questionId });
 
   return (
     <View>

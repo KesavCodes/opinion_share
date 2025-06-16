@@ -1,15 +1,19 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useContext } from "react";
-import { QuestionOptionsContext } from "../../../store/questionOptionsContext";
 import { colors } from "../../../constants/colors";
 
-const PreviewUserQuestion = () => {
-  const { userQuestion } = useContext(QuestionOptionsContext);
+type IProps = {
+  question: string | undefined;
+  type?: string;
+};
+const PreviewUserQuestion = ({ type, question }: IProps) => {
+  if (!question) return null;
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Question Preview 🧐</Text>
+      <Text style={styles.title}>
+        Question {type === "preview" && "Preview "}🧐
+      </Text>
       <ScrollView style={styles.inputHolder}>
-        <Text style={styles.text}>{userQuestion}</Text>
+        <Text style={styles.text}>{question}</Text>
       </ScrollView>
     </View>
   );
@@ -25,8 +29,8 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: colors.textPrimary,
     fontWeight: 900,
-    marginBottom: 10,
-},
+    marginVertical: 16,
+  },
   inputHolder: {
     padding: 12,
     borderWidth: 0.3,
