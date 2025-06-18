@@ -78,11 +78,11 @@ const QuestionDrawer = () => {
           availableQuestions.map((item, index) => {
             const displayName = item.createdBy.name || item.createdBy.username;
             return (
-              <Pressable onPress={() => onQuestionCardPressHandler(item.id)}>
-                <View
-                  key={item.id}
-                  style={[styles.card, index === 0 && styles.firstCard]}
-                >
+              <Pressable
+                key={item.id}
+                onPress={() => onQuestionCardPressHandler(item.id)}
+              >
+                <View style={[styles.card, index === 0 && styles.firstCard]}>
                   <View style={styles.titleHolder}>
                     <Text
                       style={styles.title}

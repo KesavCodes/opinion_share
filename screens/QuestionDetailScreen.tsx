@@ -4,6 +4,7 @@ import { RootStackParamList } from "../navigation/StackNavigation";
 import Title from "../components/common/Title";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import QuestionTextAndOptions from "../components/QuestionDetailComponents/QuestionTextAndOptions";
+import QuestionAnswers from "../components/QuestionDetailComponents/UserAnswers";
 
 const QuestionDetailScreen = ({
   route,
@@ -18,6 +19,7 @@ const QuestionDetailScreen = ({
     <View>
       <Title holderStyle={styles.titleContainer} />
       <QuestionTextAndOptions id={questionId}/>
+      <QuestionAnswers id={questionId} />
     </View>
   );
 };
